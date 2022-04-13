@@ -48,7 +48,8 @@
 
         <div class="replyButtons">
             <% if (isAdmin) { %>
-            <button id="deleteRating" type="button" onclick="window.parent.displayConfirmation();deleteRatingHandler('<%- reviewID %>');">Delete Rating</a>
+            <button id="deleteRating" type="button"
+                onclick="window.parent.displayConfirmation();deleteRatingHandler('<%- reviewID %>');">Delete Rating
                 <% } else { %>
                 <a id="replyButton" href="#">Reply to Comment</a>
                 <a class="showRep">Show Replies</a>
@@ -165,27 +166,26 @@
             // are u sure u want to delete this
             const confirmation = await window.parent.deleteConfirmation();
 
-            if (confirmation == true)
-            {
+            if (confirmation == true) {
                 const result = await fetch('/api/deleteRating', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    reviewID
-                })
-            }).then((res) => res.json());
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        reviewID
+                    })
+                }).then((res) => res.json());
 
-            if (result.status === 'ok') {
-                console.log("Review deleted successfully");
-                alert('Review deleted successfully');
-                location.reload();
-            } else {
-                alert(result.error);
+                if (result.status === 'ok') {
+                    console.log("Review deleted successfully");
+                    alert('Review deleted successfully');
+                    location.reload();
+                } else {
+                    alert(result.error);
+                }
             }
-            }
-            
+
         };
     </script>
 </body>
