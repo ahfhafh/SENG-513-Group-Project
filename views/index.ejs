@@ -63,7 +63,8 @@
             <p><b>Description: </b>
                 <%- course.description %>
             </p>
-            <p><b>Rating: </b><%- Number(course.avgRating).toFixed(2); %> /5 <b>from</b> <%- course.messages.length %> <b>students</b></p>
+            <p><b>Rating: </b><%- Number(course.avgRating).toFixed(2); %> /5 <b>from</b> <%- course.messages.length %>
+                <b>students</b></p>
             <a onclick="reviewButtonHandler('<%- course.course %>')">Add a review</a>
             <p><b>Comments:</b></p>
             <iframe src="courseComments/<%- course.course %> " height="261" width="446" style="border: none;"
@@ -73,16 +74,14 @@
     <% }) %>
 
     <div id="myModal" style="display:none;" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
-          <p>ARE YOU SURE YOU WANT TO DELETE?</p>
-          <button id="noDelete" type="button">No</button>
-          <button id="yesDelete" type="button">Yes</button>
+            <p>ARE YOU SURE YOU WANT TO DELETE?</p>
+            <button id="noDelete" type="button">No</button>
+            <button id="yesDelete" type="button">Yes</button>
         </div>
-      
-      </div>
-      
+    </div>
+
 
 </body>
 
@@ -154,7 +153,7 @@
 
     const courseNameHandler = (event, courseSearch) => {
         if (event.keyCode == 13) {
-            
+
             var courses = document.getElementsByClassName("course-content");
             if (courseSearch == "") {
                 popularTitle.style.visibility = "visible";
@@ -228,27 +227,27 @@
 
     };
 
-    function displayConfirmation(){
+    function displayConfirmation() {
         var modal = document.getElementById("myModal");
         modal.style.display = "block";
     }
-    
-    function deleteConfirmation(){
+
+    function deleteConfirmation() {
         var modal = document.getElementById("myModal");
         var noButton = document.getElementById("noDelete");
         var yesButton = document.getElementById("yesDelete");
 
-        return new Promise(function(resolve, reject) {
-          noButton.onclick = function() {
-                    modal.style.display = "none";
-                    resolve(false);
+        return new Promise(function (resolve, reject) {
+            noButton.onclick = function () {
+                modal.style.display = "none";
+                resolve(false);
 
-          }
-          yesButton.onclick = function() {
-                    modal.style.display = "none";
-                    resolve(true);
-          }
-     });
+            }
+            yesButton.onclick = function () {
+                modal.style.display = "none";
+                resolve(true);
+            }
+        });
     }
 
 </script>
