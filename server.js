@@ -18,8 +18,7 @@ const courseCommentsRouter = require('./routers/courseCommentsRouter');
 const addDepartmentRouter = require('./routers/addDepartmentRouter');
 
 const mongoose = require('mongoose');
-// TODO: move to .env
-const mongoDB = process.env.MONGO_URI || 'mongodb+srv://ahfhafh:jEYduRc7cZmHExJ@cluster0.3cy1i.mongodb.net/users-database?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGO_URI;
 mongoose.connect(mongoDB).then(() => {
     console.log("Mongoose connected");
 }).catch((err) => console.log(err));
@@ -47,9 +46,6 @@ app.use(userPageCommentsRouter);
 app.use(courseCommentsRouter);
 app.use(addDepartmentRouter);
 
-// TODO: move to .env
-const JWT_SECRET = "cat";
-
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email }).lean();
@@ -58,7 +54,7 @@ app.post('/api/login', async (req, res) => {
         console.log("Wrong email or password");
         return res.json({ status: 'error', error: 'Wrong email or password' });
     } else if (await bcrypt.compare(password, user.password)) {
-        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: "24h" });
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "24h" });
         res.cookie('jwt', token, { httpOnly: true });
         // console.log("Login successful");
         return res.json({ status: 'ok', data: token });

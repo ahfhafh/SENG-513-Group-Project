@@ -4,8 +4,7 @@ const UserModel = require('../models/user');
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {
-        // TODO: temp jwt secret
-        jwt.verify(token, process.env.JWT_SECRET || 'cat', async (err, decodedToken) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
                 res.locals.user = null;
@@ -25,8 +24,7 @@ const checkUser = (req, res, next) => {
 const requireLogin = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {
-        // TODO: temp jwt secret
-        jwt.verify(token, process.env.JWT_SECRET || 'cat', (err, decodedToken) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
                 // console.log("Need to be logged in");
