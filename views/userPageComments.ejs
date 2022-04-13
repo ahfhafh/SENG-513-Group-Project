@@ -1,110 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Page Comments</title>
-    <link rel="stylesheet" href="styles/userPageCommentsStyle.css">
-    <link rel="stylesheet" href="styles/indexStyle.css">
-    <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Page Comments</title>
+  <link rel="stylesheet" href="styles/userPageCommentsStyle.css">
+  <link rel="stylesheet" href="styles/courseCommentsStyle.css">
+  <link rel="stylesheet" href="styles/indexStyle.css">
+  <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <style>
-        .collapsible {
-          background-color: #fcafac;
-          color: white;
-          cursor: pointer;
-          padding: 18px;
-          margin-bottom: 5px;
+  <style>
+    .collapsible {
+      background-color: #fcafac;
+      color: white;
+      cursor: pointer;
+      padding: 18px;
+      margin-bottom: 5px;
 
-          width: 100%;
-          border: none;
-          text-align: left;
-          outline: none;
-          font-size: 15px;
-          border-radius: 8px;
+      width: 95%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      border-radius: 8px;
 
-        }
-        
-        .active, .collapsible:hover {
-          background-color: #f76c67;
-        }
-        
-        .content {
-          padding: 0 18px;
-          display: none;
-          overflow: hidden;
-          background-color: #D6001C99;
-        }
-        /* scrollbar */
-        /* width */
-::-webkit-scrollbar {
-  width: 20px;
-}
+    }
 
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px red; 
-  border-radius: 10px;
-  background:  #fcafac; 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: grey; 
-  border-radius: 10px;
-}
+    .active,
+    .collapsible:hover {
+      background-color: #f76c67;
+      margin-bottom: 0;
+      border-radius: 8px 8px 0 0;
+    }
 
-        </style>
+    .content {
+      margin: 0 auto;
+      padding: 0 18px;
+      display: none;
+      overflow: hidden;
+      background-color: #D6001C99;
+      width: 95%;
+    }
+
+    #deleteRating {
+      display: block;
+      margin: 6px auto;
+    }
+
+    #userCommentDeleteModal {
+      display: none;
+      padding-top: 25vh;
+    }
+
+    .modal-content {
+      width: 75%;
+    }
+
+    /* scrollbar */
+    /* width */
+    ::-webkit-scrollbar {
+      width: 20px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px red;
+      border-radius: 10px;
+      background: #fcafac;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: grey;
+      border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- START put in some loop for all comments -->
-<% user.messages.forEach((message) => { %> 
+  <% user.messages.forEach((message) => { %>
   <button type="button" class="collapsible"><%- message.course?.course %>
     <% for (let i = 0; i < message.rating; i++) { %>
-      <span class="fa fa-star fa-lg checked"></span> <!-- full star -->
-  <% }; %>
-  <% for (let i = 5-message.rating; i > 0; i--) { %>
+    <span class="fa fa-star fa-lg checked"></span> <!-- full star -->
+    <% }; %>
+    <% for (let i = 5-message.rating; i > 0; i--) { %>
     <span class="fa fa-star fa-lg"></span> <!-- full star -->
-<% }; %>
+    <% }; %>
   </button>
   <div class="content">
-      <p><% let timestamp = message._id.toString().substring(0, 8); 
+    <p><% let timestamp = message._id.toString().substring(0, 8); 
         let options = { year: 'numeric', month: 'short', day: 'numeric' };%>
-        <%- (new Date(parseInt(timestamp, 16) * 1000)).toLocaleDateString("en-US", options); %></p>
-      <p class="comments"><%- message.comment %></p>
-    <!-- <iframe src="userPageComments.html" height="200" width="300" style="border:none" title="Iframe Example"></iframe> -->
+      <%- (new Date(parseInt(timestamp, 16) * 1000)).toLocaleDateString("en-US", options); %></p>
+    <p class="comments"><%- message.comment %></p>
+    <button id="deleteRating" type="button"
+      onclick="displayConfirmation();deleteRatingHandler('<%- message._id %>');">Delete Rating
   </div>
-<% }) %> 
+  <% }) %>
 
-<script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
-  });
-}
-</script>
-<!-- END put in some loop for all comments -->
-
-    <!-- <h1> In progress</h1>
-
-    <ul id="userCommentList">
-        <li> Comment 1  Stars arrow</li>
-        <li> Comment 2  Stars arrow</li>
-        <li> Comment 3  Stars arrow</li>
-    </ul> -->
-
+  <div id="userCommentDeleteModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <p>ARE YOU SURE YOU WANT TO DELETE?</p>
+      <button id="noDelete" type="button">No</button>
+      <button id="yesDelete" type="button">Yes</button>
+    </div>
+  </div>
 </body>
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+
+  const deleteRatingHandler = async (reviewID) => {
+    // are u sure u want to delete this
+    const confirmation = await deleteConfirmation();
+
+    if (confirmation == true) {
+      const result = await fetch('/api/deleteRating', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          reviewID
+        })
+      }).then((res) => res.json());
+
+      if (result.status === 'ok') {
+        console.log("Review deleted successfully");
+        alert('Review deleted successfully');
+        location.reload();
+      } else {
+        alert(result.error);
+      }
+    }
+  };
+
+  function displayConfirmation() {
+    var modal = document.getElementById("userCommentDeleteModal");
+    modal.style.display = "block";
+  }
+
+  function deleteConfirmation() {
+    var modal = document.getElementById("userCommentDeleteModal");
+    var noButton = document.getElementById("noDelete");
+    var yesButton = document.getElementById("yesDelete");
+
+    return new Promise(function (resolve, reject) {
+      noButton.onclick = function () {
+        modal.style.display = "none";
+        resolve(false);
+
+      }
+      yesButton.onclick = function () {
+        modal.style.display = "none";
+        resolve(true);
+      }
+    });
+  }
+</script>
+
 </html>
